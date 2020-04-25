@@ -1,0 +1,37 @@
+[
+    {
+        "name": "etopo1",
+        "label": "ETOPO1 (ice)",
+        "resolution": "0.016666666666666667",
+        "previewUrl": "https://gis.ngdc.noaa.gov/arcgis/rest/services/web_mercator/etopo1_hillshade/MapServer",
+        "description": "Grid of Earth's surface depicting the top of the Antarctic and Greenland ice sheets (1-minute resolution)"
+    },
+    {
+        "name": "crm",
+        "label": "Coastal Relief Models",
+        "resolution": "0.000833333333333334",
+        "previewUrl": "https://gis.ngdc.noaa.gov/arcgis/rest/services/DEM_mosaics/DEM_global_mosaic_hillshade/ImageServer",
+        "description": "Coastal Relief Model (3-second resolution)"
+    },
+    {
+        "name": "socal_3as",
+        "label": "S. California Coastal Relief Model (3s)",
+        "resolution": "0.000833333333333334",
+        "previewUrl": "https://gis.ngdc.noaa.gov/arcgis/rest/services/DEM_mosaics/DEM_global_mosaic_hillshade/ImageServer",
+        "description": "Southern California Coastal Relief Model (3-second resolution)"
+    },
+    {
+        "name": "socal_1as",
+        "label": "S. California Coastal Relief Model (1s)",
+        "resolution": "0.000277777780000",
+        "previewUrl": "https://gis.ngdc.noaa.gov/arcgis/rest/services/DEM_mosaics/DEM_global_mosaic_hillshade/ImageServer",
+        "description": "Southern California Coastal Relief Model (1 arc-second resolution)"
+    },
+    {
+        "name": "great_lakes",
+        "label": "Great Lakes Bathymetry",
+        "resolution": "0.000833333333333334",
+        "previewUrl": "https://gis.ngdc.noaa.gov/arcgis/rest/services/DEM_mosaics/DEM_global_mosaic_hillshade/ImageServer",
+        "description": "Great Lakes Bathymetry (3-second resolution)"
+    }
+]

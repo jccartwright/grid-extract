@@ -1,0 +1,12 @@
+.DatasetSelectWidget {
+    font-size: medium;
+}
+
+.DatasetSelectWidget-select {
+    font-size: medium;
+    width: 100%;
+}
+
+.DatasetSelectWidget-descriptionPanel {
+    font-size: small;    
+}
