@@ -78,7 +78,7 @@ define([
                 esriRequest(this.datafile, { responseType: "json"}).then(
                     function(response){
                         this.datasets = response.data;
-                        console.log(this.datasets);
+                        // console.log(this.datasets);
                         this.populateDatasetSelect();
                         // this.memoryStore = new MemoryStore({data: response.data, idProperty: "id" });
                         // this.createFilteringSelect().bind(this);
@@ -117,7 +117,7 @@ define([
                 // console.log('dataset is now ' + dataset.name);
                 this._descriptionPanel.textContent = dataset.description;
 
-                topic.publish(this.topicName, dataset.name);
+                topic.publish(this.topicName, dataset);
 
             },
 

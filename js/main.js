@@ -1,5 +1,6 @@
 require([
     "dojo/topic",
+    "esri/core/lang",
     "esri/widgets/CoordinateConversion",
     "esri/widgets/Expand",
     "esri/widgets/Home",
@@ -12,7 +13,7 @@ require([
     "app/DrawExtentTool",
     "app/Globals",
     "dojo/domReady"
-], function (topic, CoordinateConversion, Expand, Home, ImageryLayer, Map, MapView, MosaicRule, RasterFunction, DatasetSelectWidget, DrawExtentTool, globals) {
+], function (topic, esriLang, CoordinateConversion, Expand, Home, ImageryLayer, Map, MapView, MosaicRule, RasterFunction, DatasetSelectWidget, DrawExtentTool, globals) {
 
     let bbox = null;
 
@@ -95,6 +96,7 @@ require([
     // do something with change of dataset
     topic.subscribe("dataset/change", function(){
         dataset = arguments[0];
+        console.log(dataset);
         updateUrl();
         togglePreviewLayers(dataset);
     })
@@ -124,20 +126,55 @@ require([
     }
 
 
-    function calculateCellCount(resolution, extent) {
-		var res = globals.selectedLayer.resolution;
-		var extent = globals.selectedExtent;
+    function calculateCellCount(resolution, extent) {		
 		var xDist = extent.xmax - extent.xmin;
-		var yDist = extent.ymax - extent.ymin;
-		var rows = Math.ceil(xDist / res);
-		var cols = Math.ceil(yDist / res);
-		return (rows * cols);
+        var yDist = extent.ymax - extent.ymin;
+		var rows = Math.ceil(xDist / resolution);
+        var cols = Math.ceil(yDist / resolution);
+		return ([rows, cols]);
     }
     
 
+    function snapToGridResolution(extent, resolution) {
+        // deep copy
+        let expandedExtent = esriLang.clone(extent);
+
+        // expand the original bbox to match the provided resolution
+        expandedExtent.xmin = Math.max(snapToGrid(extent.xmin, resolution), -180)
+        expandedExtent.ymin = Math.max(snapToGrid(extent.ymin, resolution), -90)
+        expandedExtent.xmax = Math.min(snapToGrid(extent.xmax, resolution), 180)
+        expandedExtent.ymax = Math.min(snapToGrid(extent.ymax, resolution), 90)
+
+        return(expandedExtent);
+    }
+
+
+    function snapToGrid(value, resolution) {
+            // return Math.round(value/interval) * interval;
+            if (value < 0) {
+                var val = Math.abs(value)
+                var result = Math.ceil(val/resolution) * resolution
+                return (result * -1)
+            } else {
+                return (Math.ceil(value/resolution) * resolution)
+            }
+    }    
+
+
     function updateUrl() {
-        if (this.dataset && this.extent) { 
-            // TODO validate values including calculating # cells and bbox crossing antimeridian
+        if (this.dataset && this.extent) {
+            if (this.extent.xmin > this.extent.xmax) {
+                // TODO alert dialog
+                console.error('Area of interest cannot cross the antimeridian');
+                return;
+            }
+
+            let newExtent = snapToGridResolution(this.extent, this.dataset.resolution);
+            let [rows, cols] = calculateCellCount(this.dataset.resolution, newExtent);
+            console.log('rows: ' + rows +'; cols: ' + cols);
+            console.log("bbox: ", extentToString(newExtent));
+        
+            // TODO construct URL
             enableDownload(true);
         } else {
             console.warn('both dataset and area of interest must be set');
