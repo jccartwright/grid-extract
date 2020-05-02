@@ -1,56 +1,53 @@
 require([
+    "dojo/_base/lang",
     "dojo/topic",
     "esri/core/lang",
     "esri/widgets/CoordinateConversion",
     "esri/widgets/Expand",
     "esri/widgets/Home",
     "esri/layers/ImageryLayer",
+    "esri/layers/TileLayer",
     "esri/Map",
     "esri/views/MapView",
     "esri/layers/support/MosaicRule",
     "esri/layers/support/RasterFunction",
+    "app/BboxEntryWidget",
+    "app/CoordinatesTool",
     "app/DatasetSelectWidget",
     "app/DrawExtentTool",
     "app/Globals",
     "dojo/domReady"
-], function (topic, esriLang, CoordinateConversion, Expand, Home, ImageryLayer, Map, MapView, MosaicRule, RasterFunction, DatasetSelectWidget, DrawExtentTool, globals) {
-
-    let bbox = null;
-
-    console.log('my name is ' + globals.getName());
-
-    document.getElementById("resetBtn").addEventListener('click', resetButtonHandler);
-
-    var dem_all = new ImageryLayer({
-        url: "https://gis.ngdc.noaa.gov/arcgis/rest/services/DEM_mosaics/DEM_all/ImageServer",
-        renderingRule: {
-            functionName: "ColorHillshade"
-        }
-    });
-
-    // layer id must match dataset name
-    var crm_hillshade = new ImageryLayer({
-        id: 'crm',
-        url: "https://gis.ngdc.noaa.gov/arcgis/rest/services/DEM_mosaics/DEM_all/ImageServer",
-        renderingRule: {
-            functionName: "ColorHillshade"
-        },
-        mosaicRule: {
-            where: "DemName='U.S. Coastal Relief Model'"
-        },
-        visible: false
-    });
+], function (
+    lang,
+    topic, 
+    esriLang, 
+    CoordinateConversion, 
+    Expand,  
+    Home, 
+    ImageryLayer,
+    TileLayer,
+    Map, 
+    MapView, 
+    MosaicRule, 
+    RasterFunction, 
+    BboxEntryWidget,
+    CoordinatesTool,
+    DatasetSelectWidget, 
+    DrawExtentTool, 
+    globals) {
+    
+    document.getElementById("resetBtn").addEventListener('click', lang.hitch(this, resetButtonHandler));
 
     var map = new Map({
         basemap: "topo-vector",
-        layers: [crm_hillshade]
+        layers: globals.getMapLayers()
     });
     
     var view = new MapView({
         container: "viewDiv",
         map: map,
-        center: [-118.80500, 34.02700],
-        zoom: 13
+        center: [-97, 38],
+        zoom: 4
     });
 
     view.when(function() { 
@@ -62,53 +59,76 @@ require([
         // lifecycle method 'startup' called automatically when added to View UI
         view.ui.add(drawExtentTool, "top-left");
 
-        const homeWidget = new Home({
-            view: view
-        });
+        const homeWidget = new Home({view: view});
         view.ui.add(homeWidget, "top-right");
 
-        const coordinateDisplayWidget = new CoordinateConversion({
-            container: document.createElement("div"),
-            view: view
-        });
+        const coordinatesTool = new CoordinatesTool({mapView: view});
+        view.ui.add(coordinatesTool, "bottom-left");
+
+        // const coordinateDisplayWidget = new CoordinateConversion({
+        //     container: document.createElement("div"),
+        //     view: view
+        // });
         // view.ui.add(coordinateDisplayWidget, "bottom-left");
 
-        coordinateDisplayExpand = new Expand({
-            expandIconClass: "esri-icon-tracking",  // see https://developers.arcgis.com/javascript/latest/guide/esri-icon-font/
-            view: view,
-            content: coordinateDisplayWidget.domNode,
-            expanded: false
-          });
-        view.ui.add(coordinateDisplayExpand, "bottom-left");
+        // coordinateDisplayExpand = new Expand({
+        //     expandIconClass: "esri-icon-tracking",  // see https://developers.arcgis.com/javascript/latest/guide/esri-icon-font/
+        //     view: view,
+        //     content: coordinateDisplayWidget.domNode,
+        //     expanded: false
+        //   });
+        // view.ui.add(coordinateDisplayExpand, "bottom-left");
     })
 
     // doesn't need to wait for MapView or datafile to load
     const datasetSelectWidget = new DatasetSelectWidget({}, 'datasetSelectWidgetDiv');
+    datasetSelectWidget.startup();
 
-    // do something with the area of interest
+    const bboxEntryWidget = new BboxEntryWidget({textEntryNode: 'bboxText'}, 'bboxEntryWidgetDiv');
+    bboxEntryWidget.startup();
+    
+    // populate dialog with current coords each time it opens. 
+    // TODO bit of a hack but couldn't find better way to listen for dialog being opened
+    $('#bboxDialog').on('show.bs.modal', function (event) {
+        bboxEntryWidget.initDialog(document.getElementById("bboxText").value);
+    });
+
+    // TODO should these subscriptions be wrapped w/ this.own() to prevent memory leaks?
+
+    // do something with the area of interest as set on map
     topic.subscribe("aoi/change", function(){
-        extent = arguments[0]
-        console.log('area of interest set to: ', extentToString(extent));
-        document.getElementById("bboxText").value = extentToString(extent,2);
+        this.extent = arguments[0]
+        // console.log('area of interest set to: ', extentToString(this.extent));
+        document.getElementById("bboxText").value = extentToString(this.extent,2);
         updateUrl();
-    })
+    }.bind(this));
 
     // do something with change of dataset
     topic.subscribe("dataset/change", function(){
-        dataset = arguments[0];
-        console.log(dataset);
+        this.dataset = arguments[0];
         updateUrl();
         togglePreviewLayers(dataset);
-    })
+    }.bind(this));
+
+    topic.subscribe("bbox/change", function() {
+        this.extent = arguments[0];
+        document.getElementById("bboxText").value = extentToString(this.extent,2);
+        updateMap(this.extent);
+        updateUrl();
+    }.bind(this));
 
 
     function resetButtonHandler(evt) {
-        console.log('inside resetButtonHandler with ',evt);
-        // TODO
         // clear graphics from map
-        // reset dataset select
-        // clear AOI text entry
-    }
+        topic.publish("map/clear");
+    
+        datasetSelectWidget.reset();
+        dataset = null;
+        document.getElementById('bboxText').value = "";
+        extent = null;
+        togglePreviewLayers();
+        updateUrl();
+    };
 
 
     function enableDownload(enable) {
@@ -116,6 +136,7 @@ require([
             document.getElementById("downloadBtn").classList.add("disabled");
         } else {
             document.getElementById("downloadBtn").classList.remove("disabled");
+            document.getElementById('downloadBtn').href = "";
         }
     }
 
@@ -136,6 +157,8 @@ require([
     
 
     function snapToGridResolution(extent, resolution) {
+        //TODO better to just mutate the provided extent?
+
         // deep copy
         let expandedExtent = esriLang.clone(extent);
 
@@ -150,15 +173,26 @@ require([
 
 
     function snapToGrid(value, resolution) {
-            // return Math.round(value/interval) * interval;
-            if (value < 0) {
-                var val = Math.abs(value)
-                var result = Math.ceil(val/resolution) * resolution
-                return (result * -1)
-            } else {
-                return (Math.ceil(value/resolution) * resolution)
-            }
+        // return Math.round(value/interval) * interval;
+        if (value < 0) {
+            var val = Math.abs(value)
+            var result = Math.ceil(val/resolution) * resolution
+            return (result * -1)
+        } else {
+            return (Math.ceil(value/resolution) * resolution)
+        }
     }    
+
+
+    // poor-man's template replacement since storing template literal w/in 
+    // variable didn't seem to work
+    function populateUrlTemplate(template, extent, width, height) {
+        let bbox = [extent.xmin, extent.ymin, extent.xmax, extent.ymax].map(x => x.toFixed(5));
+        let result = template.replace("${bbox}", bbox.join(','));
+        result = result.replace("${width}", width);
+        result = result.replace("${height}", height);
+        return(result);
+    }
 
 
     function updateUrl() {
@@ -171,21 +205,26 @@ require([
 
             let newExtent = snapToGridResolution(this.extent, this.dataset.resolution);
             let [rows, cols] = calculateCellCount(this.dataset.resolution, newExtent);
-            console.log('rows: ' + rows +'; cols: ' + cols);
-            console.log("bbox: ", extentToString(newExtent));
+            console.log(`rows: ${rows}; cols: ${cols}`);
+            console.log("modified bbox: ", extentToString(newExtent));
         
-            // TODO construct URL
+            const url = populateUrlTemplate(this.dataset.urlTemplate, this.extent, cols, rows);
+            // console.log(url);
+
+            document.getElementById('downloadBtn').href = url;
             enableDownload(true);
         } else {
-            console.warn('both dataset and area of interest must be set');
+            // console.warn('both dataset and area of interest must be set');
             enableDownload(false);
         }
     }
 
 
-    function togglePreviewLayers(layerId) {
+    function togglePreviewLayers(dataset) {
+        const previewLayerId = dataset ? dataset.previewLayerId: "";
+
         map.layers.forEach(function(layer){
-            if (layer.id === layerId) {
+            if (layer.id === previewLayerId) {
                 layer.visible = true;
             } else {
                 layer.visible = false;

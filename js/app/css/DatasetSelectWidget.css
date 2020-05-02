@@ -1,12 +1,17 @@
 .DatasetSelectWidget {
     font-size: medium;
+    color: black;
 }
 
 .DatasetSelectWidget-select {
     font-size: medium;
     width: 100%;
+    background-color: lightgray;
+
 }
 
 .DatasetSelectWidget-descriptionPanel {
-    font-size: small;    
+    font-size: small;
+    background-color: lightgray;
+ 
 }

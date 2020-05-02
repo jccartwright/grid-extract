@@ -73,6 +73,12 @@ define([
             //
             // utility methods
             //
+            reset: function() {
+                this._datasetSelect.selectedIndex = 0;
+                this._descriptionPanel.textContent = "";
+            },
+
+
             loadDatasetList: function() {
                 // load the data file
                 esriRequest(this.datafile, { responseType: "json"}).then(

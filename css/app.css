@@ -8,13 +8,47 @@ body {
 
 .header {
     grid-area: header;
-    background-color: #0079c1;
+    /* background-color: #0079c1; */
+    background-color:#112E51
+
 }
 
 .footer {
     grid-area: footer;
-    background-color: #0079c1;
+    /* background-color: #0079c1; */
 }
+
+#footerDiv {
+    background-color:#112E51;
+    color:white;
+    font-size:12px;
+    font-family:Helvetica,Arial;
+    font-weight:bold
+}
+
+#footerDiv a {
+    color:white;
+    font-size: small;
+}
+
+#footerDiv tr {
+    background-color:#112E51
+}
+
+#bboxText {
+    background-color: lightgray;
+}
+/* #messageContainer {
+    position: absolute;
+    bottom: 60px;
+    background-color: lightgray;
+}
+#messagePanel {
+    font-size: medium;
+    color: black;
+    width: 300px;
+    height: 150px;
+} */
 
 .sidebar {
     grid-area: sidebar;
@@ -39,15 +73,15 @@ body {
 }
 
 .box {
-color: black;
+color: #ffffff;
 padding: 10px;
-font-size: 20px; 
+font-size: x-large; 
 }
 
 @media only screen and (min-width: 544px)  {
 .wrapper {
 grid-template-columns: 320px auto;
-grid-template-rows: 100px  auto 100px;
+grid-template-rows: 75px  auto 50px;
 grid-template-areas:
     "header   header"
     "sidebar  map"

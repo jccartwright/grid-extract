@@ -6,6 +6,8 @@
     <title>Grid Extract</title>
     <link rel="stylesheet" href="./css/app.css">
     <link rel="stylesheet" href="./js/app/css/DatasetSelectWidget.css">
+    <link rel="stylesheet" href="./js/app/css/BboxEntryWidget.css">
+    <link rel="stylesheet" href="./js/app/css/CoordinateTool.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://js.arcgis.com/4.15/esri/themes/light/main.css">
@@ -13,24 +15,54 @@
 
 <body>
     <div class="wrapper">
-        <div class="box header" id="titleDiv">Grid Extract</div>
+        <!-- start header -->
+        <div class="box header" id="titleDiv">            
+            <a href="https://www.ncei.noaa.gov/" title="National Centers for Environmental Information, National Oceanic and Atmospheric Administration">
+            <img src="images/map-banner.png" alt="National Centers for Environmental Information, National Oceanic and Atmospheric Administration" height="50px" style="vertical-align:middle; padding:3px 5px; margin-right:100px";></a>
+            Grid Extract - download subsets of raster data
+        </div>
+        <!-- end header -->
         <div class="box sidebar" id="sidebarDiv">
             <div id="datasetSelectWidgetDiv">DatasetSelectWidget goes here</div>
 
             <div id="bboxContainer">
                 <span>Area of Interest:</span>
-                <input id="bboxText" type="text"></input>
+                <input id="bboxText" type="text" readonly data-toggle="modal" data-target="#bboxDialog"></input>
             </div>
 
             <div id="buttonsContainer">
-            <a id="downloadBtn"  class="btn btn-primary disabled" href="#" role="button" tabindex="-1">Download Data</a>
-            <input id="resetBtn" class="btn btn-primary" type="reset" value="Reset">
-        </div>
-
+                <a id="downloadBtn"  class="btn btn-primary disabled" href="#" role="button" tabindex="-1">Download Data</a>
+                <input id="resetBtn" class="btn btn-primary" type="reset" value="Reset">
+            </div>
+            <!-- <div id="messageContainer" class="card" >
+                <div id="messagePanel" class="card-body">
+                    Welcome to the Grid Extract tool
+                </div>
+            </div> -->
+    
         </div> <!-- end of sidebar -->
+
         <div class="map" id="viewDiv"></div>
-        <div class="box footer" id="footerDiv">Footer</div>
-    </div>
+        <div class="box footer" id="footerDiv">
+            <table class="footer" align="center">
+                <tr valign="middle" align="center">
+                  <td>
+                    <a href="https://www.ncei.noaa.gov/privacy" title="NOAA's Privacy Policy">Privacy Policy</a> |
+                    <a href="https://www.noaa.gov/foia-freedom-of-information-act" title="Freedom of Information Act">Freedom Of Information Act</a> |
+                    <a href="https://www.cio.noaa.gov/services_programs/info_quality.html" title="Information Quality">Information Quality</a> |
+                    <a href="https://www.noaa.gov/disclaimer.html" title="Disclaimer">Disclaimer</a> |
+                    <a href="https://www.ncdc.noaa.gov/survey" title="Take Our Site Survey">Take Our Survey</a> |
+                    <a href="https://www.commerce.gov/" title="United States Department of Commerce">Department of Commerce</a> |
+                    <a href="https://www.noaa.gov/" title="NOAA">NOAA</a> |</font>
+                    <a href="https://www.nesdis.noaa.gov/" title="NESDIS">NESDIS</a> |
+                    <a href="mailto:ncei.info@noaa.gov" rel="nofollow">Contact Us</a>
+                  </td>
+                </tr>
+            </table>
+        </div> <!-- end of footer -->
+    </div> 
+
+    <div id="bboxEntryWidgetDiv">BboxEntryWidget goes here </div>
 
     <!-- positioning managed by MapView UI -->
     <div id="drawExtentTool"></div>

@@ -60,6 +60,25 @@ define([
                 // assume we are overridng a method that may do something in a class up the inheritance chain
                 this.inherited(arguments);
                 this.fillSymbol = this.createFillSymbol();
+
+                topic.subscribe("bbox/change", function() {
+                    let extent = arguments[0];
+                    console.log(extent);
+                    // TODO clear previous extent, draw new one
+                    this.mapView.graphics.remove(this.extentGraphic);
+                    this.extentGraphic = new Graphic({
+                        geometry: extent,
+                        symbol: this.fillSymbol
+                    }),
+                    this.mapView.graphics.add(this.extentGraphic);                    
+                }.bind(this));
+
+
+                topic.subscribe("map/clear", function(){
+                    this.mapView.graphics.remove(this.extentGraphic);
+                    this.domNode.setAttribute("style", "");
+                }.bind(this));
+
             },
 
 

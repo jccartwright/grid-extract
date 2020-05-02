@@ -1,0 +1,50 @@
+
+<div data-dojo-attach-point="_container" id="container" class="${baseClass}">
+
+    <div class="modal fade"  data-dojo-attach-point="_bboxDialog" id="bboxDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Enter coordinates</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <table style="width: 100%;">
+                    <tr>
+                        <td class="${baseClass}-center" colspan="2">
+                            <label for="north" class="${baseClass}-label">North</label>
+                            <input id="north" class="${baseClass}-input" data-dojo-attach-point="_northInput" data-dojo-attach-event="onchange: validateInput" type="text" pattern="-?\d+\.?\d*">
+                        </td>
+                    </tr>           
+                    <tr>
+                        <td class="${baseClass}-left-align">
+                            <label for="west" class="${baseClass}-label">West</label>
+                            <input id="west" class="BboxEntryWidget-input" data-dojo-attach-point="_westInput" data-dojo-attach-event="onchange: validateInput" type="text" pattern="-?\d+\.?\d*">
+                        </td>
+                        <td class="${baseClass}-right-align">
+                            <label for="east" class="${baseClass}-label">East</label>
+                            <input id="east" class="${baseClass}-input" data-dojo-attach-point="_eastInput" data-dojo-attach-event="onchange: validateInput" type="text" pattern="-?\d+\.?\d*">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="${baseClass}-center" colspan="2">             
+                            <label for="south" class="${baseClass}-label">South</label>
+                            <input id="south" class="${baseClass}-input" data-dojo-attach-point="_southInput" data-dojo-attach-event="onchange: validateInput" type="text" pattern="-?\d+\.?\d*">
+                        </td>
+                    </tr>
+                    </table>
+                </div>  
+                <div class="${baseClass}-units">Latitude: -85 to 85; Longitude: -180 to 180<br/>(signed decimal degrees)</div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" >Cancel</button>
+              <button type="button" class="btn btn-primary disabled" data-dojo-attach-point="_saveButton" data-dojo-attach-event="onclick: saveBtnHandler">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+</div>

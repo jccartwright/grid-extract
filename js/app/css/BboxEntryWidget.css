@@ -1,0 +1,42 @@
+.BboxEntryWidget div.modal-body {
+    background-color: lightgray;
+}
+
+.BboxEntryWidget div.modal-header {
+    background-color: darkgray;
+
+}
+
+.BboxEntryWidget-center {
+    text-align: center;
+    padding: 10px;
+}
+
+.BboxEntryWidget-right-align {
+    text-align: right;
+    padding-right: 10px;
+}
+
+.BboxEntryWidget-left-align {
+    padding-left: 10px;
+}
+
+.BboxEntryWidget-input {
+    width: 75px;
+    margin-left: 5px;
+    font-size: small;
+}
+
+.BboxEntryWidget-units {
+	width:100%;
+	text-align: center;
+	font-size: 8px;
+}
+
+input:invalid {
+    border: 2px solid red;
+}
+  
+input:valid {
+    border: 1px solid black;
+}
