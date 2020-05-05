@@ -113,7 +113,6 @@ require([
     topic.subscribe("bbox/change", function() {
         this.extent = arguments[0];
         document.getElementById("bboxText").value = extentToString(this.extent,2);
-        updateMap(this.extent);
         updateUrl();
     }.bind(this));
 
@@ -134,9 +133,9 @@ require([
     function enableDownload(enable) {
         if (! enable) {
             document.getElementById("downloadBtn").classList.add("disabled");
+            document.getElementById('downloadBtn').href = "";
         } else {
             document.getElementById("downloadBtn").classList.remove("disabled");
-            document.getElementById('downloadBtn').href = "";
         }
     }
 
@@ -147,31 +146,52 @@ require([
     }
 
 
-    function calculateCellCount(resolution, extent) {		
-		var xDist = extent.xmax - extent.xmin;
+    function calculateCellCount(resolution, extent) {
+        // console.log('inside calculateCellCount with ', resolution);	
+        var xDist = extent.xmax - extent.xmin;
+        // console.log('deltaX = ', xDist);
+        // console.log('cellsX = ', xDist/resolution);
+
         var yDist = extent.ymax - extent.ymin;
-		var rows = Math.ceil(xDist / resolution);
-        var cols = Math.ceil(yDist / resolution);
+        // console.log('deltaY = ', yDist);
+        // console.log('cellsY = ', yDist/resolution);
+
+        var cols = Math.round(xDist / resolution);
+        var rows = Math.round(yDist / resolution);
 		return ([rows, cols]);
     }
     
 
     function snapToGridResolution(extent, resolution) {
-        //TODO better to just mutate the provided extent?
+        // extent needs to represent the outer boundary of cell
+        let cellOffset = resolution / 2;
 
         // deep copy
-        let expandedExtent = esriLang.clone(extent);
+        let newExtent = esriLang.clone(extent);
 
-        // expand the original bbox to match the provided resolution
-        expandedExtent.xmin = Math.max(snapToGrid(extent.xmin, resolution), -180)
-        expandedExtent.ymin = Math.max(snapToGrid(extent.ymin, resolution), -90)
-        expandedExtent.xmax = Math.min(snapToGrid(extent.xmax, resolution), 180)
-        expandedExtent.ymax = Math.min(snapToGrid(extent.ymax, resolution), 90)
+        // first expand the bbox to match dataset's resolution
+        newExtent.xmin = snapToGrid(extent.xmin, resolution);
+        newExtent.ymin = snapToGrid(extent.ymin, resolution);
+        newExtent.xmax = snapToGrid(extent.xmax, resolution);
+        newExtent.ymax = snapToGrid(extent.ymax, resolution);
+        // coords = [newExtent.xmin, newExtent.ymin, newExtent.xmax, newExtent.ymax].map(x => x.toFixed(12));
+        // console.log("Expanded but not translated SW: ",coords.join(', '));
 
-        return(expandedExtent);
-    }
+        // then shift to the SW to align bbox with outer edge of dataset's grid cell
+        newExtent.xmin -= cellOffset;
+        newExtent.ymin -= cellOffset;
+        newExtent.xmax -= cellOffset;
+        newExtent.ymax -= cellOffset;
+
+        // coords = [newExtent.xmin, newExtent.ymin, newExtent.xmax, newExtent.ymax].map(x => x.toFixed(12));
+        // console.log("Expanded and translated SW: ",coords.join(', '));
+        return(newExtent);
+    };
 
 
+    // expand the original bbox so that length and width are multiple of 
+    // the provided resolution. This, subject floating point variability,
+    // gets close to an integer number of cells 
     function snapToGrid(value, resolution) {
         // return Math.round(value/interval) * interval;
         if (value < 0) {
@@ -208,7 +228,7 @@ require([
             console.log(`rows: ${rows}; cols: ${cols}`);
             console.log("modified bbox: ", extentToString(newExtent));
         
-            const url = populateUrlTemplate(this.dataset.urlTemplate, this.extent, cols, rows);
+            const url = populateUrlTemplate(this.dataset.urlTemplate, newExtent, cols, rows);
             // console.log(url);
 
             document.getElementById('downloadBtn').href = url;
