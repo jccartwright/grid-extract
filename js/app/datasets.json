@@ -4,7 +4,7 @@
         "label": "ETOPO1 (ice)",
         "resolution": "0.016666666666666667",
         "previewLayerId": "etopo1",
-        "urlTemplate": "https://gis.ngdc.noaa.gov/arcgis/rest/services/DEM_mosaics/ETOPO1_ice_surface/ImageServer/exportImage?bbox=${bbox}&bboxSR=4326&size=${width},${height}&imageSR=4326&format=tiff&pixelType=S16&interpolation=+RSP_BilinearInterpolation&compression=LZW&f=image",
+        "urlTemplate": "https://gis.ngdc.noaa.gov/arcgis/rest/services/DEM_mosaics/ETOPO1_ice_surface/ImageServer/exportImage?bbox=${bbox}&bboxSR=4326&size=${width},${height}&imageSR=4326&format=tiff&pixelType=S16&interpolation=+RSP_NearestNeighbor&compression=LZW&f=image",
         "description": "Grid of Earth's surface depicting the top of the Antarctic and Greenland ice sheets (1-minute resolution)"
     },
     {
@@ -12,7 +12,7 @@
         "label": "ETOPO1 (bedrock)",
         "resolution": "0.016666666666666667",
         "previewLayerId": "etopo1",
-        "urlTemplate": "https://gis.ngdc.noaa.gov/arcgis/rest/services/DEM_mosaics/ETOPO1_bedrock/ImageServer/exportImage?bbox=${bbox}&bboxSR=4326&size=${width},${height}&imageSR=4326&format=tiff&pixelType=S16&interpolation=+RSP_BilinearInterpolation&compression=LZW&f=image",
+        "urlTemplate": "https://gis.ngdc.noaa.gov/arcgis/rest/services/DEM_mosaics/ETOPO1_bedrock/ImageServer/exportImage?bbox=${bbox}&bboxSR=4326&size=${width},${height}&imageSR=4326&format=tiff&pixelType=S16&interpolation=+RSP_NearestNeighbor&compression=LZW&f=image",
         "description": "Grid of Earth's surface depicting the bedrock underneath the ice sheets. (1-minute resolution)"
     },
     {
@@ -20,7 +20,7 @@
         "label": "Coastal Relief Models",
         "resolution": "0.000833333333333334",
         "previewLayerId": "crm",
-        "urlTemplate": "https://gis.ngdc.noaa.gov/arcgis/rest/services/DEM_mosaics/DEM_all/ImageServer/exportImage?bbox=${bbox}&bboxSR=4326&size=${width},${height}&imageSR=4326&format=tiff&pixelType=F32&interpolation=+RSP_BilinearInterpolation&compression=LZW&mosaicRule={\"mosaicMethod\":\"esriMosaicAttribute\",\"where\":\"DemName='U.S. Coastal Relief Model'\"}&f=image",
+        "urlTemplate": "https://gis.ngdc.noaa.gov/arcgis/rest/services/DEM_mosaics/DEM_all/ImageServer/exportImage?bbox=${bbox}&bboxSR=4326&size=${width},${height}&imageSR=4326&format=tiff&pixelType=F32&interpolation=+RSP_NearestNeighbor&compression=LZW&mosaicRule={\"mosaicMethod\":\"esriMosaicAttribute\",\"where\":\"DemName='U.S. Coastal Relief Model'\"}&f=image",
         "description": "Coastal Relief Model (3-second resolution)"
     },
     {
@@ -28,7 +28,7 @@
         "label": "S. California Coastal Relief Model (3s)",
         "resolution": "0.000833333333333334",
         "previewLayerId": "socal_3as",
-        "urlTemplate": "https://gis.ngdc.noaa.gov/arcgis/rest/services/DEM_mosaics/DEM_all/ImageServer/exportImage?bbox=${bbox}&bboxSR=4326&size=${width},${height}&imageSR=4326&format=tiff&pixelType=F32&interpolation=+RSP_BilinearInterpolation&compression=LZW&mosaicRule={\"mosaicMethod\":\"esriMosaicAttribute\",\"where\":\"name='socal_3as'\"}&f=image",
+        "urlTemplate": "https://gis.ngdc.noaa.gov/arcgis/rest/services/DEM_mosaics/DEM_all/ImageServer/exportImage?bbox=${bbox}&bboxSR=4326&size=${width},${height}&imageSR=4326&format=tiff&pixelType=F32&interpolation=+RSP_NearestNeighbor&compression=LZW&mosaicRule={\"mosaicMethod\":\"esriMosaicAttribute\",\"where\":\"name='socal_3as'\"}&f=image",
         "description": "Southern California Coastal Relief Model (3-second resolution)"
     },
     {
@@ -36,7 +36,7 @@
         "label": "S. California Coastal Relief Model (1s)",
         "resolution": "0.000277777780000",
         "previewLayerId": "socal_1as",
-        "urlTemplate": "https://gis.ngdc.noaa.gov/arcgis/rest/services/DEM_mosaics/DEM_all/ImageServer/exportImage?bbox=${bbox}&bboxSR=4326&size=${width},${height}&imageSR=4326&format=tiff&pixelType=F32&interpolation=+RSP_BilinearInterpolation&compression=LZW&mosaicRule={\"mosaicMethod\":\"esriMosaicAttribute\",\"where\":\"name='socal_1as'\"}&f=image",
+        "urlTemplate": "https://gis.ngdc.noaa.gov/arcgis/rest/services/DEM_mosaics/DEM_all/ImageServer/exportImage?bbox=${bbox}&bboxSR=4326&size=${width},${height}&imageSR=4326&format=tiff&pixelType=F32&interpolation=+RSP_NearestNeighbor&compression=LZW&mosaicRule={\"mosaicMethod\":\"esriMosaicAttribute\",\"where\":\"name='socal_1as'\"}&f=image",
         "description": "Southern California Coastal Relief Model (1 arc-second resolution)"
     },
     {
@@ -44,7 +44,7 @@
         "label": "Great Lakes Bathymetry",
         "previewLayerId": "great_lakes",
         "resolution": "0.000833333333333334",
-        "urlTemplate": "https://gis.ngdc.noaa.gov/arcgis/rest/services/DEM_mosaics/DEM_all/ImageServer/exportImage?bbox=${bbox}&bboxSR=4326&size=${width},${height}&imageSR=4326&format=tiff&pixelType=F32&interpolation=+RSP_BilinearInterpolation&compression=LZW&mosaicRule={\"mosaicMethod\":\"esriMosaicAttribute\",\"where\":\"name='greatlakes_lakedatum'\"}&f=image",
+        "urlTemplate": "https://gis.ngdc.noaa.gov/arcgis/rest/services/DEM_mosaics/DEM_all/ImageServer/exportImage?bbox=${bbox}&bboxSR=4326&size=${width},${height}&imageSR=4326&format=tiff&pixelType=F32&interpolation=+RSP_NearestNeighbor&compression=LZW&mosaicRule={\"mosaicMethod\":\"esriMosaicAttribute\",\"where\":\"name='greatlakes_lakedatum'\"}&f=image",
         "description": "Great Lakes Bathymetry (3-second resolution)"
     }
 ]
