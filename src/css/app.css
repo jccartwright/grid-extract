@@ -50,6 +50,13 @@ body {
     height: 150px;
 } */
 
+#helpBtn {
+    position: absolute;
+    bottom: 80px;
+    width: 200px;
+    margin-left: 50px;    
+}
+
 .sidebar {
     grid-area: sidebar;
     background-color: #333;

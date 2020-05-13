@@ -19,30 +19,31 @@ require([
     "dojo/domReady"
 ], function (
     lang,
-    topic, 
-    esriLang, 
-    CoordinateConversion, 
-    Expand,  
-    Home, 
+    topic,
+    esriLang,
+    CoordinateConversion,
+    Expand,
+    Home,
     ImageryLayer,
     TileLayer,
-    Map, 
-    MapView, 
-    MosaicRule, 
-    RasterFunction, 
+    Map,
+    MapView,
+    MosaicRule,
+    RasterFunction,
     BboxEntryWidget,
     CoordinatesTool,
-    DatasetSelectWidget, 
-    DrawExtentTool, 
+    DatasetSelectWidget,
+    DrawExtentTool,
     globals) {
-    
     document.getElementById("resetBtn").addEventListener('click', lang.hitch(this, resetButtonHandler));
+
+   console.log(`version is ${process.env.npm_package_version}`);
 
     var map = new Map({
         basemap: "topo-vector",
         layers: globals.getMapLayers()
     });
-    
+
     var view = new MapView({
         container: "viewDiv",
         map: map,
@@ -50,11 +51,11 @@ require([
         zoom: 4
     });
 
-    view.when(function() { 
+    view.when(function () {
         // tool to draw area of interest on map
         const drawExtentTool = new DrawExtentTool({
-            mapView: view, 
-            outlineColor: [0,0,0]
+            mapView: view,
+            outlineColor: [0, 0, 0]
         }, 'drawExtentTool');
         // lifecycle method 'startup' called automatically when added to View UI
         view.ui.add(drawExtentTool, "top-left");

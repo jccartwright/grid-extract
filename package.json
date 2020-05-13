@@ -1,11 +1,38 @@
 {
   "name": "grid-extract",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "browser-sync start --server --files \"*.html, js/*.js, css/*.css, js/app/**/*\""
+    "printenv": "node -e 'console.log(process.env)'",
+    "insertVersion": "node scripts/insert_version_info.js",
+    "dev": "watch 'npm run build' src",
+    "test": "jest",
+    "test:watch": "npm test -- --watch",
+    "start": "browser-sync start --server 'dist' --files \"dist/**/*.html, dist/**/*.js, dist/**/*.css\"",
+    "build": "babel src -d dist --watch --copy-files --ignore 'src/**/*.spec.js','src/**/*.test.js' --no-copy-ignored",
+  },
+  "babel": {
+    "presets": [
+      "@babel/env"
+    ],
+    "plugins": [
+      [
+        "transform-inline-environment-variables",
+        {
+          "include": [
+            "NODE_ENV",
+            "npm_package_version"
+          ]
+        }
+      ],
+      [
+        "@babel/plugin-transform-modules-commonjs",
+        {
+          "strictMode": false
+        }
+      ]
+    ]
   },
   "repository": {
     "type": "git",
@@ -16,5 +43,23 @@
   "bugs": {
     "url": "https://github.com/jccartwright/grid-extract/issues"
   },
-  "homepage": "https://github.com/jccartwright/grid-extract#readme"
+  "homepage": "https://github.com/jccartwright/grid-extract#readme",
+  "dependencies": {
+    "replace-in-file": "^6.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.6",
+    "@babel/plugin-transform-strict-mode": "^7.8.3",
+    "@babel/preset-env": "^7.9.6",
+    "babel-plugin-transform-inline-environment-variables": "^0.4.3",
+    "eslint": "^7.0.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "jest": "^26.0.1",
+    "watch": "^1.0.2"
+  }
 }

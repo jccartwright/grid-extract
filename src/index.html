@@ -1,9 +1,12 @@
 <html>
 <head>
+    <!-- Build Date: @@BUILD_DATE@@ -->
+    <!-- Build Version: @@VERSION@@ -->
     <meta charset="utf-8">
     <link rel="shortcut icon" href="https://www.ngdc.noaa.gov/image/favicon.ico">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>Grid Extract</title>
+    <title>Grid Extract
+    </title>
     <link rel="stylesheet" href="./css/app.css">
     <link rel="stylesheet" href="./js/app/css/DatasetSelectWidget.css">
     <link rel="stylesheet" href="./js/app/css/BboxEntryWidget.css">
@@ -31,7 +34,10 @@
             </div>
 
             <div id="buttonsContainer">
-                <a id="downloadBtn"  class="btn btn-primary disabled" href="#" role="button" tabindex="-1">Download Data</a>
+                <a id="downloadBtn"  class="btn btn-primary disabled" href="#" 
+                role="button" tabindex="-1" data-toggle="tooltip" data-placement="top"
+                title="download data in GeoTIFF format">
+                Download Data</a>
                 <input id="resetBtn" class="btn btn-primary" type="reset" value="Reset">
             </div>
             <!-- <div id="messageContainer" class="card" >
@@ -39,7 +45,9 @@
                     Welcome to the Grid Extract tool
                 </div>
             </div> -->
-    
+            <button id="helpBtn" class="btn btn-primary" type="button" data-toggle="modal" data-target="#helpDialog">
+                Help
+            </button>        
         </div> <!-- end of sidebar -->
 
         <div class="map" id="viewDiv"></div>
@@ -66,6 +74,44 @@
 
     <!-- positioning managed by MapView UI -->
     <div id="drawExtentTool"></div>
+
+    <!-- Help Dialog -->
+    <div class="modal fade" id="helpDialog" tabindex="-1" role="dialog" aria-labelledby="helpModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="helpModalTitle">Grid Extract Help</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        First specify the dataset from which you wish to download data. A brief
+                        description will appear just below and include the dataset's resolution, i.e. cell size.
+                    </p>
+                    <p>
+                        Then specify an area of interest, either by using the draw tool
+                        ( <span class="esri-icon-sketch-rectangle"></span> ) on
+                        the map or by clicking on the text entry and specifying the coordinates
+                        in decimal degrees. Note that the area of interest cannot cross the
+                        antimeridian (i.e. longitude 180) nor extend beyond the 90 degrees north or south.
+                    </p>
+                    <p>
+                        Once both a dataset and valid set of coordinates have been specified the "Download Data" button
+                        will be activated and you can click to to extract and download the data in a GeoTIFF format. Please
+                        note that GeoTIFF is currently the only supported download format.
+                    </p>
+                    <p>
+                        Contact <a href="mailto:ncei.info@noaa.gov">ncei.info@noaa.gov</a> with questions or comments.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
